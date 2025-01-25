@@ -1,6 +1,8 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
+import globalErrorHandler from './middleware/globalErrorHandler';
+import notFound from './middleware/notFound';
 import sendResponse from './utils/sendResponse';
 
 const app: Application = express();
@@ -22,5 +24,11 @@ app.get('/', (req: Request, res: Response) => {
     data: null,
   });
 });
+
+// Global error handler
+app.use(globalErrorHandler);
+
+// Not Found handler
+app.use(notFound);
 
 export default app;
