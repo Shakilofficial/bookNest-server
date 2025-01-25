@@ -1,0 +1,26 @@
+{
+  "name": "backend-for-booknest-application",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backend",
+    "booknest",
+    "application",
+    "user",
+    "roles",
+    "authentication",
+    "CRUD",
+    "operations",
+    "book",
+    "order",
+    "user",
+    "review"
+  ],
+  "author": "Md Shakil Hossain",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "Backend for a bookshop application with user roles, authentication, and CRUD operations for book,order,user,and review entities."
+}
