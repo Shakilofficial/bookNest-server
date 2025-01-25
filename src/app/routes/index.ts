@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { authRoutes } from '../modules/auth/auth.route';
+import { orderRoutes } from '../modules/order/order.route';
 import { productRoutes } from '../modules/product/product.route';
+import { reviewRoutes } from '../modules/review/review.route';
 import { userRoutes } from '../modules/user/user.route';
 
 const router = Router();
@@ -18,6 +20,14 @@ const moduleRoutes = [
   {
     path: '/products',
     route: productRoutes, // Route for handling product-related operations
+  },
+  {
+    path: '/orders',
+    route: orderRoutes, // Route for handling order-related operations
+  },
+  {
+    path: '/reviews',
+    route: reviewRoutes, // Route for handling review-related operations
   },
 ];
 

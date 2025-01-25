@@ -4,7 +4,7 @@ export interface IReview {
   user: Types.ObjectId;
   product: Types.ObjectId;
   rating: number;
-  comment: string;
+  comment?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

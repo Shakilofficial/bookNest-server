@@ -19,7 +19,7 @@ const reviewSchema = new Schema<IReview>(
     },
     comment: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {
