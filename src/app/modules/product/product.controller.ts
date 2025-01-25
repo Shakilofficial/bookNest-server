@@ -56,7 +56,53 @@ const updateProduct = catchAsync(async (req, res) => {
   });
 });
 
+// Get Single Product Controller
+const getSingleProduct = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  // Call service layer to handle business logic
+  const product = await productServices.getSingleProduct(id);
+
+  // Send success response
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Product fetched successfully ✔️',
+    data: product,
+  });
+});
+
+const deleteProduct = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  // Call service layer to handle business logic
+  const deletedProduct = await productServices.deleteProduct(id);
+
+  // Send success response
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Product deleted successfully ✔️',
+    data: deletedProduct,
+  });
+});
+
+// Get All Products Controller
+const getAllProducts = catchAsync(async (req, res) => {
+  // Call service layer to handle business logic
+  const result = await productServices.getAllProducts(req.query);
+  // Send success response
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Products retrieved successfully ✔️',
+    meta: result.meta,
+    data: result.result,
+  });
+});
+
 export const productControllers = {
   createProduct,
   updateProduct,
+  getSingleProduct,
+  deleteProduct,
+  getAllProducts,
 };
