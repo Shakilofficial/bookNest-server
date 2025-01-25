@@ -49,6 +49,10 @@ const userSchema = new Schema<IUSer, UserModel>(
       default: Date.now(),
     },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );
