@@ -68,13 +68,13 @@ const forgotPassword = catchAsync(async (req, res) => {
 
 const resetPassword = catchAsync(async (req, res) => {
   const email = req.user?.email;
-  const payload = req.body;
-  await authServices.resetPassword(email, payload);
-  sendResponse(res, {
+
+  const result = await authServices.resetPassword(email, req.body);
+  sendResponse(res.clearCookie('refreshToken'), {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Password reset successfully',
-    data: null,
+    data: result,
   });
 });
 

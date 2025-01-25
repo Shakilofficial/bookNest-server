@@ -11,7 +11,6 @@ const auth = (...roles: TUserRole[]) =>
   catchAsync(async (req, res, next) => {
     // Get token from request headers and remove Bearer from the token string if present using split
     const token = req.headers.authorization?.split(' ')[1];
-
     // Check if token is present
     if (!token) {
       throw new AppError(
@@ -41,13 +40,23 @@ const auth = (...roles: TUserRole[]) =>
         'Your account is blocked ⛔',
       );
     }
-    // if user has the required role
+    if (
+      user.passwordChangedAt &&
+      decoded.iat! < user.passwordChangedAt.getTime() / 1000
+    ) {
+      throw new AppError(
+        StatusCodes.UNAUTHORIZED,
+        'Password has been changed, please log in again',
+      );
+    }
+
     if (roles.length && !roles.includes(role)) {
       throw new AppError(
         StatusCodes.UNAUTHORIZED,
         'Access denied for the current role 🚫',
       );
     }
+
     // Set the decoded payload as the user property in the request object
     req.user = decoded as JwtPayload;
     // Continue to the next middleware

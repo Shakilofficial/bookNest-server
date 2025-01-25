@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { authControllers } from './auth.controller';
 import { authValidations } from './auth.validation';
@@ -32,6 +33,7 @@ router.post(
 // Reset password route for resetting the password
 router.post(
   '/reset-password',
+  auth('admin', 'user'),
   validateRequest(authValidations.resetPasswordValidationSchema),
   authControllers.resetPassword,
 );
