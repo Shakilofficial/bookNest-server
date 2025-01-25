@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
+import { upload } from '../../utils/sendImageToCloudinary';
 import { userControllers } from './user.controller';
 import { userValidations } from './user.validation';
 
@@ -10,6 +11,7 @@ const router = Router();
 router.patch(
   '/update-profile',
   auth('admin', 'user'),
+  upload.single('profileImg'),
   validateRequest(userValidations.updateUserValidationSchema),
   userControllers.updateProfile,
 );

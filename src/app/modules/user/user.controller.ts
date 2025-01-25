@@ -3,6 +3,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { userServices } from './user.service';
+import { userValidations } from './user.validation';
 
 // User controllers for handling user-related operations
 
@@ -36,13 +37,21 @@ const getMe = catchAsync(async (req, res) => {
 //Update user profile controller for updating the user profile
 const updateProfile = catchAsync(async (req, res) => {
   const { id } = req.user as JwtPayload;
-  const payload = req.body;
-  const result = await userServices.updateProfile(id, payload);
+
+  const file = req.file;
+  const payload = req.body.data ? JSON.parse(req.body.data) : req.body;
+
+  const parsedPayload = userValidations.updateUserValidationSchema.parse({
+    body: payload,
+  }).body;
+
+  const updatedUser = await userServices.updateProfile(id, file, parsedPayload);
+
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'User profile updated successfully',
-    data: result,
+    message: 'User profile updated successfully ✔️',
+    data: updatedUser,
   });
 });
 
