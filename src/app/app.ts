@@ -1,8 +1,9 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-import globalErrorHandler from './middleware/globalErrorHandler';
-import notFound from './middleware/notFound';
+import globalErrorHandler from './middlewares/globalErrorHandler';
+import notFound from './middlewares/notFound';
+import router from './routes';
 import sendResponse from './utils/sendResponse';
 
 const app: Application = express();
@@ -13,7 +14,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Routes
-// app.use('/api/v1', router);
+app.use('/api/v1', router);
 
 // Health Check
 app.get('/', (req: Request, res: Response) => {
