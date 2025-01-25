@@ -19,4 +19,21 @@ router.post(
   authControllers.login,
 );
 
+// Refresh token route for refreshing the token
+router.post('/refresh-token', authControllers.refreshToken);
+
+// Forgot password route for sending a reset password link to the user
+router.post(
+  '/forgot-password',
+  validateRequest(authValidations.forgetPasswordValidationSchema),
+  authControllers.forgotPassword,
+);
+
+// Reset password route for resetting the password
+router.post(
+  '/reset-password',
+  validateRequest(authValidations.resetPasswordValidationSchema),
+  authControllers.resetPassword,
+);
+
 export const authRoutes = router;

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { model, Schema } from 'mongoose';
+import mongoose, { model, Schema } from 'mongoose';
 import config from '../../config';
 import { userRoles } from './user.constant';
 import { IUSer, UserModel } from './user.interface';
@@ -44,17 +44,11 @@ const userSchema = new Schema<IUSer, UserModel>(
       type: String,
       default: '',
     },
-    resetPasswordToken: {
-      type: String,
-    },
-    resetPasswordExpires: {
+    passwordChangedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now(),
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
   },
   { timestamps: true },
 );
@@ -75,5 +69,25 @@ userSchema.pre('save', async function (next) {
 userSchema.post('save', function (doc) {
   doc.password = '';
 });
+
+userSchema.statics.isUserExistsByEmail = async function (email: string) {
+  const user = await this.findOne({ email }).select('+password').lean();
+  return user;
+};
+userSchema.statics.isPasswordMatched = async function (
+  plainPassword: string,
+  hashedPassword: string,
+) {
+  const isPasswordMatched = await bcrypt.compare(plainPassword, hashedPassword);
+  return isPasswordMatched;
+};
+
+userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+  passwordChangedAt: Date,
+  jwtIssuedat: number,
+) {
+  const passwordChangedTime = new Date(passwordChangedAt).getTime() / 1000;
+  return jwtIssuedat < passwordChangedTime;
+};
 
 export const User = model<IUSer, UserModel>('User', userSchema);

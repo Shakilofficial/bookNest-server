@@ -35,7 +35,28 @@ const loginValidationSchema = z.object({
   }),
 });
 
+const refreshTokenValidationSchema = z.object({
+  cookies: z.object({
+    refreshToken: z.string({ required_error: 'Refresh token is required' }),
+  }),
+});
+
+const forgetPasswordValidationSchema = z.object({
+  body: z.object({
+    email: z.string({ required_error: 'Email is required' }).email(),
+  }),
+});
+
+const resetPasswordValidationSchema = z.object({
+  body: z.object({
+    newPassword: z.string({ required_error: 'New password is required' }),
+  }),
+});
+
 export const authValidations = {
   registerValidationSchema,
   loginValidationSchema,
+  refreshTokenValidationSchema,
+  forgetPasswordValidationSchema,
+  resetPasswordValidationSchema,
 };

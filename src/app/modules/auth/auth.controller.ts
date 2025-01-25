@@ -44,7 +44,44 @@ const login = catchAsync(async (req, res) => {
   });
 });
 
+const refreshToken = catchAsync(async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  const result = await authServices.refreshToken(refreshToken);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Token refreshed successfully',
+    data: result,
+  });
+});
+
+const forgotPassword = catchAsync(async (req, res) => {
+  const email = req.body.email;
+  await authServices.forgotPassword(email);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Password reset link sent successfully',
+    data: null,
+  });
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+  const email = req.user?.email;
+  const payload = req.body;
+  await authServices.resetPassword(email, payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Password reset successfully',
+    data: null,
+  });
+});
+
 export const authControllers = {
   register,
   login,
+  refreshToken,
+  forgotPassword,
+  resetPassword,
 };

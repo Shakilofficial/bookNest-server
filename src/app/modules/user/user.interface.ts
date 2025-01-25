@@ -14,14 +14,22 @@ export interface IUSer {
   address?: string;
   city?: string;
   isBlocked?: boolean;
-  resetPasswordToken?: string;
-  resetPasswordExpires?: Date;
-  createdAt?: Date;
+  passwordChangedAt?: Date;
+  wishlist: string[];
 }
 // extend the interface with mongoose model
 export interface UserModel extends Model<IUSer, UserModel> {
   // static method to check if a user exists
   isUserExist(_id: string): Promise<IUSer | null>;
+  isUserExistsByEmail(email: string): Promise<IUSer | null>;
+  isPasswordMatched(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean>;
+  isJWTIssuedBeforePasswordChanged(
+    passwordChangedAt: Date,
+    jwtIssuedat: number,
+  ): boolean;
 }
 
 // Type for user roles
