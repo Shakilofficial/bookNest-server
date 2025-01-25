@@ -33,6 +33,19 @@ const getMe = catchAsync(async (req, res) => {
   });
 });
 
+//Update user profile controller for updating the user profile
+const updateProfile = catchAsync(async (req, res) => {
+  const { id } = req.user as JwtPayload;
+  const payload = req.body;
+  const result = await userServices.updateProfile(id, payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'User profile updated successfully',
+    data: result,
+  });
+});
+
 //Block user controller for blocking a user
 const blockUser = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -64,4 +77,5 @@ export const userControllers = {
   getAllUsers,
   getMe,
   blockUser,
+  updateProfile,
 };

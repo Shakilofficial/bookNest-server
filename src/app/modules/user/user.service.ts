@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../helpers/errors/AppError';
 import { userSearchableFields } from './user.constant';
-import { TUserRoles } from './user.interface';
+import { IUSer, TUserRoles } from './user.interface';
 import { User } from './user.model';
 
 // User services for handling user-related operations
@@ -29,6 +29,20 @@ const getMe = async (id: string, role: TUserRoles) => {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'Access denied');
   }
   return user;
+};
+
+//authenticated user can update thier profile
+const updateProfile = async (id: string, payload: Partial<IUSer>) => {
+  //only update name,profileImg,phone,address,city
+  const user = await User.findById(id);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+  if (user.isBlocked) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'User is blocked');
+  }
+  const updatedUser = await User.findByIdAndUpdate(id, payload);
+  return updatedUser;
 };
 
 //Blocked user
@@ -65,4 +79,5 @@ export const userServices = {
   getAllUsers,
   getMe,
   blockUser,
+  updateProfile,
 };

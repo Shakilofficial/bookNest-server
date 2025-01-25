@@ -1,10 +1,18 @@
 import { Router } from 'express';
 import auth from '../../middlewares/auth';
+import validateRequest from '../../middlewares/validateRequest';
 import { userControllers } from './user.controller';
+import { userValidations } from './user.validation';
 
 const router = Router();
 
 // Routes for handling user-related operations : Authorized user access only
+router.patch(
+  '/update-profile',
+  auth('admin', 'user'),
+  validateRequest(userValidations.updateUserValidationSchema),
+  userControllers.updateProfile,
+);
 
 router.get('/me', auth('admin', 'user'), userControllers.getMe);
 // Get single user route for retrieving a single user : Authorized user access only
