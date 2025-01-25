@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../helpers/errors/AppError';
 import { userSearchableFields } from './user.constant';
+import { TUserRoles } from './user.interface';
 import { User } from './user.model';
 
 // User services for handling user-related operations
@@ -19,21 +20,49 @@ const getSingleUser = async (id: string) => {
   return user;
 };
 
+const getMe = async (id: string, role: TUserRoles) => {
+  const user = await User.findById(id);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+  if (user.role !== role) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'Access denied');
+  }
+  return user;
+};
+
+//Blocked user
+const blockUser = async (id: string) => {
+  const user = await User.findById(id);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+  if (user.isBlocked) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'User is already blocked');
+  }
+
+  user.isBlocked = true;
+  await user.save();
+};
+
 // Get all users service for retrieving all users
 const getAllUsers = async (query: Record<string, unknown>) => {
   // Create a new query builder with the User model and query object
-  const Users = new QueryBuilder(User.find(), query)
+  const usersQuery = new QueryBuilder(User.find(), query)
     .search(userSearchableFields)
     .filter()
     .paginate()
     .sort()
     .fields();
   // Execute the query and return the result
-  const result = await Users.modelQuery;
-  return result;
+  const result = await usersQuery.modelQuery;
+  const meta = await usersQuery.countTotal();
+  return { result, meta };
 };
 
 export const userServices = {
   getSingleUser,
   getAllUsers,
+  getMe,
+  blockUser,
 };
