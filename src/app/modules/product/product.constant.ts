@@ -18,6 +18,7 @@ export const productCategories: TProductCategory[] = [
   'Mystery',
   'ScienceFiction',
   'History',
+  'Technology',
 ];
 
 // Constant for product searchable fields
