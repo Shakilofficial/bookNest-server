@@ -25,44 +25,21 @@ const orderSchema = new Schema<IOrder>(
     ],
     totalPrice: {
       type: Number,
-      required: true,
       min: 0,
     },
     status: {
       type: String,
-      required: true,
       enum: orderStatuses,
       default: 'Pending',
     },
     transaction: {
-      id: {
-        type: String,
-        required: true,
-      },
-      transactionStatus: {
-        type: String,
-        required: true,
-      },
-      bank_status: {
-        type: String,
-        required: true,
-      },
-      sp_code: {
-        type: String,
-        required: true,
-      },
-      sp_message: {
-        type: String,
-        required: true,
-      },
-      method: {
-        type: String,
-        required: true,
-      },
-      date_time: {
-        type: String,
-        required: true,
-      },
+      id: String,
+      transactionStatus: String,
+      bank_status: String,
+      sp_code: String,
+      sp_message: String,
+      method: String,
+      date_time: String,
     },
   },
   {

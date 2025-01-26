@@ -1,7 +1,12 @@
 import { Router } from 'express';
+import auth from '../../middlewares/auth';
+import { orderController } from './order.controller';
 
 const router = Router();
 
-// Routes for handling order-related operations
+router.post('/', auth('user'), orderController.createOrder);
+router.get('/verify', auth('user'), orderController.verifyPayment);
+router.get('/', auth('user'), orderController.getUserOrders);
+router.get('/all', auth('admin'), orderController.getAllOrders);
 
 export const orderRoutes = router;
