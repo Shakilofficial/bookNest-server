@@ -9,7 +9,10 @@ const createReviewValidationSchema = z.object({
 
 const updateReviewValidationSchema = z.object({
   body: z.object({
-    rating: z.number({ invalid_type_error: 'Rating must be a number' }).int(),
+    rating: z
+      .number({ invalid_type_error: 'Rating must be a number' })
+      .int()
+      .optional(),
     comment: z
       .string({ invalid_type_error: 'Comment must be a string' })
       .optional(),

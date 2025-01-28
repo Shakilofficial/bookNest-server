@@ -57,16 +57,9 @@ const createOrder = async (
           );
         }
 
-        // Calculate subtotal and update product quantity
+        // Calculate subtotal without updating product quantity
         const subtotal = foundProduct.price * quantity;
         totalPrice += subtotal;
-        foundProduct.quantity -= quantity;
-
-        if (foundProduct.quantity === 0) {
-          foundProduct.inStock = false;
-        }
-
-        await foundProduct.save({ session });
 
         return { product, quantity };
       }),
