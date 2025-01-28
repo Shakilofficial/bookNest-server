@@ -8,7 +8,7 @@ const router = Router();
 
 // Routes for handling review-related operations
 router.post(
-  '/:productId/reviews',
+  '/product/:productId',
   auth('user', 'admin'),
   validateRequest(reviewValidations.createReviewValidationSchema),
   reviewControllers.addReview,
