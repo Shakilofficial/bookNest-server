@@ -1,12 +1,17 @@
 import { StatusCodes } from 'http-status-codes';
 import { Types } from 'mongoose';
-import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../helpers/errors/AppError';
+import { Product } from '../product/product.model';
 import { IReview } from './review.interface';
 import { Review } from './review.model';
 
 // Add a Review
 const addReview = async (userId: Types.ObjectId, payload: IReview) => {
+  const product = await Product.findById(payload.product);
+  if (!product) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Product not found ❌');
+  }
+
   payload.user = userId;
   const review = await Review.create(payload);
   if (!review) {
@@ -21,13 +26,17 @@ const updateReview = async (
   reviewId: string,
   userId: string,
   payload: IReview,
-) => {
+): Promise<IReview | null> => {
+  // Specify the return type
+  if (!Types.ObjectId.isValid(reviewId)) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid review ID 🚫');
+  }
+
   const review = await Review.findById(reviewId);
   if (!review) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Review not found ❌');
   }
 
-  // Check if the authenticated user is the owner of the review
   if (review.user.toString() !== userId) {
     throw new AppError(
       StatusCodes.FORBIDDEN,
@@ -44,17 +53,24 @@ const updateReview = async (
   if (!updatedReview) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update review 🚫');
   }
+
   return updatedReview;
 };
 
 // Delete Review
-const deleteReview = async (reviewId: string, userId: string) => {
+const deleteReview = async (
+  reviewId: string,
+  userId: string,
+): Promise<{ message: string }> => {
+  if (!Types.ObjectId.isValid(reviewId)) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid review ID 🚫');
+  }
+
   const review = await Review.findById(reviewId);
   if (!review) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Review not found ❌');
   }
 
-  // Check if the authenticated user is the owner of the review
   if (review.user.toString() !== userId) {
     throw new AppError(
       StatusCodes.FORBIDDEN,
@@ -62,30 +78,31 @@ const deleteReview = async (reviewId: string, userId: string) => {
     );
   }
 
-  // Delete the review
   await review.deleteOne();
   return { message: 'Review deleted successfully ✔️' };
 };
 
 // Get all reviews for a product by product ID
-const getAllReviews = async (query: Record<string, unknown>) => {
-  const reviewsQuery = new QueryBuilder(
-    Review.find({ product: query.productId }).populate('user'),
-    query,
-  )
-    .filter()
-    .paginate()
-    .sort()
-    .fields();
+const getReviewsByProductId = async (productId: string) => {
+  // Fetch all reviews for the specific product
+  const reviews = await Review.find({ product: productId }).populate(
+    'user',
+    'name email profileImg',
+  ); // Optionally populate the user information for the review
 
-  const result = await reviewsQuery.modelQuery;
-  const meta = await reviewsQuery.countTotal();
-  return { result, meta };
+  if (reviews.length === 0) {
+    throw new AppError(
+      StatusCodes.NOT_FOUND,
+      'No reviews found for this product ❌',
+    );
+  }
+
+  return reviews;
 };
 
 export const reviewServices = {
   addReview,
   updateReview,
   deleteReview,
-  getAllReviews,
+  getReviewsByProductId,
 };

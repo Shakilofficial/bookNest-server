@@ -7,9 +7,8 @@ import { reviewValidations } from './review.validation';
 const router = Router();
 
 // Routes for handling review-related operations
-
 router.post(
-  '/',
+  '/:productId/reviews',
   auth('user', 'admin'),
   validateRequest(reviewValidations.createReviewValidationSchema),
   reviewControllers.addReview,

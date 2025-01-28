@@ -6,8 +6,9 @@ import { reviewServices } from './review.service';
 
 // Add Review Controller
 const addReview = catchAsync(async (req, res) => {
+  const { productId } = req.params;
   const { id } = req.user as JwtPayload;
-  const payload = { ...req.body, user: id };
+  const payload = { ...req.body, user: id, product: productId };
   const result = await reviewServices.addReview(id, payload);
 
   sendResponse(res, {
@@ -24,6 +25,7 @@ const updateReview = catchAsync(async (req, res) => {
   const reviewId = req.params.id;
   const payload = req.body;
   const result = await reviewServices.updateReview(reviewId, id, payload);
+
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -37,6 +39,7 @@ const deleteReview = catchAsync(async (req, res) => {
   const { id } = req.user as JwtPayload;
   const reviewId = req.params.id;
   const result = await reviewServices.deleteReview(reviewId, id);
+
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -47,13 +50,13 @@ const deleteReview = catchAsync(async (req, res) => {
 
 // Get all Reviews by specific product ID
 const getAllReviews = catchAsync(async (req, res) => {
-  const result = await reviewServices.getAllReviews(req.query);
+  const { productId } = req.params; // You should use 'productId' here
+  const result = await reviewServices.getReviewsByProductId(productId); // Use the renamed function
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Reviews retrieved successfully ✔️',
-    meta: result.meta,
-    data: result.result,
+    data: result,
   });
 });
 
