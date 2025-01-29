@@ -90,16 +90,13 @@ const getSingleProduct = async (id: string) => {
   return product;
 };
 
+//product deleted data
 const deleteProduct = async (id: string) => {
   const product = await Product.findById(id);
   if (!product) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Product not found ❌');
   }
-  if (product.isDeleted) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Product is deleted 🚫');
-  }
-
-  product.isDeleted = true;
+  product.isDeleted = !product.isDeleted;
   await product.save();
 };
 

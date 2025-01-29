@@ -8,7 +8,6 @@ const createProductValidationSchema = z.object({
     price: z.number().nonnegative().optional(),
     description: z.string().optional(),
     category: z.string().optional(),
-    stock: z.number().int().optional(),
     coverImage: z.string().optional(),
     quantity: z.number().int().optional(),
   }),
@@ -21,7 +20,6 @@ const updateProductValidationSchema = z.object({
     price: z.number().nonnegative().optional(),
     description: z.string().optional(),
     category: z.string().optional(),
-    stock: z.number().int().optional(),
     coverImage: z.string().optional(),
   }),
 });
