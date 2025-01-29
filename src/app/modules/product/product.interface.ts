@@ -19,8 +19,7 @@ export type TProductCategory =
   | 'Mystery'
   | 'ScienceFiction'
   | 'History'
-  |'Technology'
-  
+  | 'Technology';
 
 export interface IProduct {
   title: string;
