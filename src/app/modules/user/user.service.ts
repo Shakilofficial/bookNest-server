@@ -90,11 +90,8 @@ const blockUser = async (id: string) => {
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
   }
-  if (user.isBlocked) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'User is already blocked');
-  }
 
-  user.isBlocked = true;
+  user.isBlocked = !user.isBlocked;
   await user.save();
 };
 
