@@ -11,7 +11,7 @@ BookNest is a powerful and scalable backend service designed for an online books
 - **Global Error Handling**: Custom error handling with detailed responses.
 - **Zod Validation**: Type-safe validation library ensuring data integrity.
 - **Advanced Querying**: Filtering, searching, and pagination for books and orders.
-
+- **SurjoPay Payment** : Payment Gategay for mobile bank and card.
 ---
 
 ## Installation
