@@ -90,13 +90,6 @@ const getReviewsByProductId = async (productId: string) => {
     'name email profileImg',
   ); // Optionally populate the user information for the review
 
-  if (reviews.length === 0) {
-    throw new AppError(
-      StatusCodes.NOT_FOUND,
-      'No reviews found for this product ❌',
-    );
-  }
-
   return reviews;
 };
 

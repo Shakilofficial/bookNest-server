@@ -84,9 +84,7 @@ const getSingleProduct = async (id: string) => {
   if (!product) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Product not found ❌');
   }
-  if (product.isDeleted) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Product is deleted 🚫');
-  }
+
   return product;
 };
 
@@ -98,6 +96,11 @@ const deleteProduct = async (id: string) => {
   }
   product.isDeleted = !product.isDeleted;
   await product.save();
+  const message = product.isDeleted
+    ? 'Product deleted successfully ✔️'
+    : 'Product restored successfully ✔️';
+
+  return { product, message };
 };
 
 const getAllProducts = async (query: Record<string, unknown>) => {

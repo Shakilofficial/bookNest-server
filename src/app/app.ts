@@ -11,7 +11,7 @@ const app: Application = express();
 // Middlewares
 app.use(
   cors({
-    origin: 'https://booknest-blond.vercel.app',
+    origin: 'http://localhost:5173',
     credentials: true,
   }),
 );

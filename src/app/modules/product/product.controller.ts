@@ -74,14 +74,14 @@ const getSingleProduct = catchAsync(async (req, res) => {
 const deleteProduct = catchAsync(async (req, res) => {
   const { id } = req.params;
   // Call service layer to handle business logic
-  const deletedProduct = await productServices.deleteProduct(id);
+  const { product, message } = await productServices.deleteProduct(id);
 
   // Send success response
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Product deleted successfully ✔️',
-    data: deletedProduct,
+    message,
+    data: product,
   });
 });
 
