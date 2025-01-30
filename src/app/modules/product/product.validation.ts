@@ -17,10 +17,12 @@ const createProductValidationSchema = z.object({
 const updateProductValidationSchema = z.object({
   body: z.object({
     title: z.string().optional(),
+    author: z.string().optional(),
     price: z.number().nonnegative().optional(),
     description: z.string().optional(),
     category: z.string().optional(),
     coverImage: z.string().optional(),
+    quantity: z.number().int().optional(),
   }),
 });
 
