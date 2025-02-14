@@ -73,5 +73,5 @@ export const orderController = {
   verifyPayment,
   getUserOrders,
   getAllOrders,
-  updateOrderStatus
+  updateOrderStatus,
 };
