@@ -167,6 +167,32 @@ const getUserOrders = async (
   return { result, meta };
 };
 
+const updateOrderStatus = async (orderId: string, status: string) => {
+  // Validate the status
+  if (!['Shipped', 'Completed'].includes(status)) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      'Invalid status. Allowed values: Shipped, Completed',
+    );
+  }
+
+  // Find and update the order
+  const updatedOrder = await Order.findByIdAndUpdate(
+    orderId,
+    { status },
+    { new: true, runValidators: true },
+  ).populate({
+    path: 'user',
+    select: 'name email',
+  });
+
+  if (!updatedOrder) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Order not found');
+  }
+
+  return updatedOrder;
+};
+
 const getAllOrders = async (query: Record<string, unknown>) => {
   const ordersQuery = new QueryBuilder(
     Order.find()
@@ -197,4 +223,5 @@ export const orderService = {
   verifyPayment,
   getUserOrders,
   getAllOrders,
+  updateOrderStatus,
 };

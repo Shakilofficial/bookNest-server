@@ -42,6 +42,20 @@ const getUserOrders = catchAsync(async (req, res) => {
   });
 });
 
+const updateOrderStatus = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const updatedOrder = await orderService.updateOrderStatus(id, status);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Order status updated successfully',
+    data: updatedOrder,
+  });
+});
+
 const getAllOrders = catchAsync(async (req, res) => {
   const orders = await orderService.getAllOrders(req.query);
 
@@ -59,4 +73,5 @@ export const orderController = {
   verifyPayment,
   getUserOrders,
   getAllOrders,
+  updateOrderStatus
 };
