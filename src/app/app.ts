@@ -11,7 +11,7 @@ const app: Application = express();
 // Middlewares
 app.use(
   cors({
-    origin: 'https://booknest-blond.vercel.app',
+    origin: 'http://localhost:5173',
     credentials: true,
   }),
 );
@@ -27,7 +27,6 @@ app.get('/', (req: Request, res: Response) => {
     statusCode: 200,
     success: true,
     message: '📚 BookNest Server is live 🚀',
-    data: null,
   });
 });
 

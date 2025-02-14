@@ -10,5 +10,5 @@ export type TResponse<T> = {
   success: boolean;
   message?: string;
   meta?: TMeta;
-  data: T | T[] | null;
+  data?: T | T[] | null;
 };

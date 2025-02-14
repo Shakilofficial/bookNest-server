@@ -34,15 +34,15 @@ const userSchema = new Schema<IUSer, UserModel>(
     },
     phone: {
       type: String,
-      default: '',
+      default: null,
     },
     address: {
       type: String,
-      default: '',
+      default: null,
     },
     city: {
       type: String,
-      default: '',
+      default: null,
     },
     passwordChangedAt: {
       type: Date,
